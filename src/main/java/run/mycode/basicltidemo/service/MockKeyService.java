@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Service;
 import run.mycode.basiclti.service.LtiKeyService;
 import run.mycode.basiclti.authentication.LtiKey;
 import run.mycode.basicltidemo.persistence.model.User;
@@ -14,6 +15,7 @@ import run.mycode.basicltidemo.persistence.model.User;
  * 
  * @author dahlem.brian
  */
+@Service
 public class MockKeyService implements LtiKeyService {
     private static final Logger LOG = LogManager.getLogger(MockKeyService.class);
     

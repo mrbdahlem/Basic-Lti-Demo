@@ -11,7 +11,6 @@ import run.mycode.basiclti.security.LtiAuthenticationProcessingFilter;
 import run.mycode.basiclti.service.LtiKeyService;
 import run.mycode.basiclti.service.NonceService;
 import run.mycode.basiclti.service.SimpleNonceServiceImpl;
-import run.mycode.basicltidemo.service.MockKeyService;
 
 @Configuration
 @Order(1)
@@ -44,10 +43,9 @@ public class LtiSecurityConfig extends WebSecurityConfigurerAdapter {
         return new SimpleNonceServiceImpl(600);
     }
     
-    @Bean(name = "keyService")
-    public LtiKeyService createKeyService() {
-        System.out.println("this");
-        return new MockKeyService();
-    }
+//    @Bean(name = "keyService")
+//    public LtiKeyService createKeyService() {
+//        return new MockKeyService();
+//    }
     
 }
