@@ -35,7 +35,8 @@ public class LtiSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(new LtiAuthenticationProcessingFilter(keyService, nonceService),
                         UsernamePasswordAuthenticationFilter.class) // Authenticate LTI launches before requiring username/password
             .authorizeRequests()
-                .antMatchers("/lti/**") // Launches will be made on any of the resources below lti
+                //.antMatchers("/lti/**", "/notlti/**") // Launches will be made on any of the resources below lti
+                .anyRequest()
                 .authenticated()        // and must be authenticated (by the filter)
                 ;
     }

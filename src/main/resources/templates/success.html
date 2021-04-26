@@ -4,8 +4,10 @@
         <title>LTI Application</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="_csrf" th:content="${_csrf.token}"/>        
-        <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+        <th:block th:if="${_csrf != null}">
+            <meta name="_csrf" th:content="${_csrf.token}"/>        
+            <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+        </th:block>
     </head>
     <body>
         <h1>LTI Verification Success!</h1>
@@ -13,6 +15,7 @@
             Hello, 
             <span th:text="${#authentication.getName()}"></span>
         </p>
-        <iframe src="/lti/p2">Clicky</iframe>
+        <iframe src="/lti/p2"></iframe>
+        <a href="/notlti/p2">Clicky.</a>
     </body>
 </html>

@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 import run.mycode.basiclti.model.LtiLaunchData;
 
 /**
@@ -42,9 +43,15 @@ public class LtiController {
         return "success";
     }
     
-    @GetMapping(value = "/lti/p2")
-    public String anotherPage() {
-        return "p2";
+    @GetMapping(value = "/notlti/p2")
+    public ModelAndView anotherPage(HttpSession session) {
+        ModelAndView mv = new ModelAndView("p2");
+        
+        LtiLaunchData data = (LtiLaunchData) session.getAttribute(LtiLaunchData.NAME);
+        mv.addObject("data", data);
+        mv.addObject("note", "NOTLTI");
+        
+        return mv;
     }
     
 }

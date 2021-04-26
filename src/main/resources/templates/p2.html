@@ -9,16 +9,19 @@ and open the template in the editor.
         <title>An iframe that verifies authentication</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="_csrf" th:content="${_csrf.token}"/>        
-        <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+        <th:block th:if="${_csrf != null}">
+            <meta name="_csrf" th:content="${_csrf.token}"/>        
+            <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+        </th:block>
     </head>
     <body>
+        <div th:text="|Note: ${note}|"/>
+        
         <div sec:authorize="isAuthenticated()">
             Hi <span th:text="${#authentication.getName()}"></span>, you are 
             still authenticated, even in this iframe.
         </div>
-        <div  sec:authorize="!isAuthenticated()">
-            You are not authenticated.
-        </div>
+        
+        <div th:text="${data.getLis_person_name_full()}"></div>
     </body>
 </html>
