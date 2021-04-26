@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import run.mycode.basiclti.model.LtiLaunchData;
 
@@ -39,6 +40,11 @@ public class LtiController {
                         .reduce("", String::concat) + " ");
         
         return "success";
+    }
+    
+    @GetMapping(value = "/lti/p2")
+    public String anotherPage() {
+        return "p2";
     }
     
 }
