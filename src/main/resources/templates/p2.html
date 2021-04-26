@@ -13,9 +13,12 @@ and open the template in the editor.
         <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     </head>
     <body>
-        <div>
+        <div sec:authorize="isAuthenticated()">
             Hi <span th:text="${#authentication.getName()}"></span>, you are 
             still authenticated, even in this iframe.
+        </div>
+        <div  sec:authorize="!isAuthenticated()">
+            You are not authenticated.
         </div>
     </body>
 </html>
