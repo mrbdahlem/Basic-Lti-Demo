@@ -17,11 +17,16 @@ and open the template in the editor.
     <body>
         <div th:text="|Note: ${note}|"/>
         
+        
+        <h2>Authentication:</h2>
         <div sec:authorize="isAuthenticated()">
             Hi <span th:text="${#authentication.getName()}"></span>, you are 
             still authenticated, even in this iframe.
         </div>
-        
-        <div th:text="${data.getLis_person_name_full()}"></div>
+                
+        <h2>Session:</h2>
+        <th:block th:if="${data != null}">
+            lis_person_name_full: <span th:text="${data.getLis_person_name_full()}"></span>
+        </th:block>
     </body>
 </html>

@@ -15,7 +15,16 @@
             Hello, 
             <span th:text="${#authentication.getName()}"></span>
         </p>
-        <iframe src="/lti/p2"></iframe>
-        <a href="/notlti/p2">Clicky.</a>
+        <div style="display: inline-block; width: 49%;">
+            <p>/lti/p2</p>
+            <iframe src="/lti/p2" width="100%" height="250px"></iframe>
+        </div>
+        <div style="display: inline-block; width: 49%;">
+            <p>/notlti/p2</p>
+            <iframe src="/notlti/p2" width="100%" height="250px"></iframe>
+        </div>
+        <p>
+            <a href="/lti/p2">Clicky.</a>
+        </p>
     </body>
 </html>

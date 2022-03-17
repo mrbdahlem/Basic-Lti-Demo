@@ -6,10 +6,11 @@ import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
 import run.mycode.basiclti.model.LtiLaunchData;
 
 /**
@@ -32,6 +33,10 @@ public class LtiController {
         session = request.getSession();
         session.setAttribute(LtiLaunchData.NAME, data);
         
+        SecurityContext sc = SecurityContextHolder.getContext();
+        session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
+        sc.setAuthentication(auth);
+        
         // Log the launch
         LOG.info("Launch for Context id: " + data.getContext_id() +
                 " User: " + auth.getName() + 
@@ -41,17 +46,5 @@ public class LtiController {
                         .reduce("", String::concat) + " ");
         
         return "success";
-    }
-    
-    @GetMapping(value = "/notlti/p2")
-    public ModelAndView anotherPage(HttpSession session) {
-        ModelAndView mv = new ModelAndView("p2");
-        
-        LtiLaunchData data = (LtiLaunchData) session.getAttribute(LtiLaunchData.NAME);
-        mv.addObject("data", data);
-        mv.addObject("note", "NOTLTI");
-        
-        return mv;
-    }
-    
+    }    
 }
