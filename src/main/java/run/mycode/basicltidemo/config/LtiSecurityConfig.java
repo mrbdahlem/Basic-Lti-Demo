@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -16,14 +17,12 @@ import run.mycode.basiclti.service.NonceService;
 import run.mycode.basiclti.service.SimpleNonceServiceImpl;
 
 @Configuration
-@EnableWebSecurity( debug = true )
+@EnableWebSecurity( debug = false )
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class LtiSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private LtiKeyService keyService;
-    
-    @Autowired
-    private NonceService nonceService;
-    
+        
     private LtiAuthenticationProcessingFilter ltiAuthFilter;
         
     @Autowired
@@ -36,14 +35,19 @@ public class LtiSecurityConfig extends WebSecurityConfigurerAdapter {
         this.ltiAuthFilter = createLtiFilter();
         
         http
+            .anonymous().disable()
+            .authorizeRequests()
+                .antMatchers("/lti/**") // Launches will be made on any of the resources below lti                
+                    .authenticated()    // and must be authenticated (by the filter)
+            .and()
+                .addFilterBefore(ltiAuthFilter, BasicAuthenticationFilter.class) // Authenticate LTI launches with the ltiAuthFilter
+                .cors().disable()                
+                ;
+        
+        http
             .authorizeRequests()
                 .anyRequest()
-                //.antMatchers("/lti/**") // Launches will be made on any of the resources below lti                
-                .authenticated()        // and must be authenticated (by the filter)
-            .and()
-                .anonymous().disable()
-            .cors().disable()
-                
+                .authenticated()
                 ;
         
         http
@@ -53,23 +57,21 @@ public class LtiSecurityConfig extends WebSecurityConfigurerAdapter {
                 .ignoringAntMatchers("/lti/**") // LTI launches are made using HTTP POST, but won't have csrf tokens so must be ignored -- nonce should eliminate csrf
             .and()
             .antMatcher("/lti/**")
-                .headers().frameOptions().disable() // Allow launches in iframes     
-            .and()
-            .addFilterBefore(ltiAuthFilter,
-                    BasicAuthenticationFilter.class) // Authenticate LTI launches
+                .headers().frameOptions().disable() // Allow launches in iframes
                 ;
         
         
     }
     
     @Bean(name = "nonceService")
-    public NonceService createNonceService() {
+    public NonceService nonceService() {
         return new SimpleNonceServiceImpl(600);
     }
     
     public LtiAuthenticationProcessingFilter createLtiFilter() {
+           
         LtiAuthenticationProcessingFilter filter = 
-                new LtiAuthenticationProcessingFilter(keyService, nonceService);
+                new LtiAuthenticationProcessingFilter(keyService, nonceService());
         filter.setAuthenticationManager(new BasicLtiAuthenticationManager());
         
         return filter;

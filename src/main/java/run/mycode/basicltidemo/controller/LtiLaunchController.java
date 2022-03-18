@@ -18,10 +18,10 @@ import run.mycode.basiclti.model.LtiLaunchData;
  *  @author dahlem.brian
  */
 @Controller
-public class LtiController {
-    private static final Logger LOG = LogManager.getLogger(LtiController.class);
+public class LtiLaunchController {
+    private static final Logger LOG = LogManager.getLogger(LtiLaunchController.class);
         
-    @PostMapping(value = "/lti/test")
+    @PostMapping(value = "/lti/launch")
     public String ltiEntry(HttpServletRequest request, HttpServletResponse response,
             Authentication auth, LtiLaunchData data) {
         
